@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Database
+src/database/database.db
+src/database/database.db-shm
+src/database/database.db-wal
+
+# Logs
+npm-debug.log*
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# backup/temp files
+*.backup
+*.bak
+*.tmp
+*.db
+*.sqlite
