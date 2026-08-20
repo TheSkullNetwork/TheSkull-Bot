@@ -1,4 +1,4 @@
-const { WARNING, SUCCESS } = require('./emojis');
+const { WARNING, SUCCESS, INFO, ERROR } = require('./emojis');
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -79,4 +79,10 @@ function loadEvents(dir) {
 const eventCount = loadEvents(path.join(__dirname, 'events'));
 console.log(`${SUCCESS} Loaded ${eventCount} events.`);
 
-client.login(process.env.TOKEN);
+console.log(`${INFO} Attempting to log in...`);
+client.login(process.env.TOKEN)
+    .then(() => console.log(`${SUCCESS} Login promise resolved.`))
+    .catch(err => {
+        console.error(`${ERROR} Login failed:`, err);
+        process.exit(1);
+    });
