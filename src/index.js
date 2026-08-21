@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js'
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ quiet: true });
+const { runPreflightChecks } = require('./utils/preflight');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -79,10 +80,21 @@ function loadEvents(dir) {
 const eventCount = loadEvents(path.join(__dirname, 'events'));
 console.log(`${SUCCESS} Loaded ${eventCount} events.`);
 
+if (!runPreflightChecks()) {
+    console.error(`${ERROR} Preflight checks failed — fix the above before the bot can start.`);
+    process.exit(1);
+}
+
 console.log(`${INFO} Attempting to log in...`);
 client.login(process.env.TOKEN)
-    .then(() => console.log(`${SUCCESS} Login promise resolved.`))
+    .then(() => console.log(`${SUCCESS} Login promise resolved — waiting for gateway handshake...`))
     .catch(err => {
-        console.error(`${ERROR} Login failed:`, err);
+        if (err.code === 'TokenInvalid') {
+            console.error(`${ERROR} Login failed: TOKEN is invalid or revoked. Regenerate it in the Developer Portal.`);
+        } else if (String(err.message).toLowerCase().includes('disallowed intents')) {
+            console.error(`${ERROR} Login failed: a privileged intent is enabled in code but not toggled on in the Developer Portal (check MESSAGE CONTENT / SERVER MEMBERS).`);
+        } else {
+            console.error(`${ERROR} Login failed:`, err);
+        }
         process.exit(1);
     });
