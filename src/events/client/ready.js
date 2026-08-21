@@ -62,8 +62,6 @@ module.exports = {
         } catch (err) {
             console.error(`${ERROR} Failed to register commands:`, err);
         }
-        console.log(`${SUCCESS} \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500`);
-        console.log(`${SUCCESS} TheSkull is online \u2014 serving ${client.guilds.cache.size} guild(s) as ${client.user.tag}`);
-        console.log(`${SUCCESS} \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500`);
+        console.log(`${SUCCESS} TheSkull is working perfectly and online as ${client.user.tag}`);
     }
 };
