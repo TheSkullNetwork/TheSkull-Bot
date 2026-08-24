@@ -12,6 +12,7 @@ module.exports = {
             .setRequired(true)),
 
     async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
         const targetChannel = interaction.options.getChannel('channel');
         const embed = new EmbedBuilder()
             .setTitle(`${SHIELD} The Skull Ticket System`)
@@ -43,6 +44,6 @@ module.exports = {
         );
 
         await targetChannel.send({ embeds: [embed], components: [menu] });
-        await interaction.reply({ content: `${SUCCESS} Panel sent to ${targetChannel}!`, ephemeral: true });
+        await interaction.editReply({ content: `${SUCCESS} Panel sent to ${targetChannel}!` });
     },
 };
