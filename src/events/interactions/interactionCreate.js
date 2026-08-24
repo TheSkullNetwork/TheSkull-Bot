@@ -4,7 +4,7 @@ module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
         try {
-            if (interaction.isChatInputCommand()) {
+            if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
                 const command = interaction.client.commands.get(interaction.commandName);
                 if (!command) return;
                 await command.execute(interaction);
