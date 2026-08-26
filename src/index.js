@@ -81,6 +81,9 @@ function loadEvents(dir) {
 const eventCount = loadEvents(path.join(__dirname, 'events'));
 console.log(`${SUCCESS} Loaded ${eventCount} events.`);
 
+client.on('error', err => console.error(`${ERROR} Client error:`, err));
+process.on('unhandledRejection', err => console.error(`${ERROR} Unhandled rejection:`, err));
+
 if (!runPreflightChecks()) {
     console.error(`${ERROR} Preflight checks failed — fix the above before the bot can start.`);
     process.exit(1);

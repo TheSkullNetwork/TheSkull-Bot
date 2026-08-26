@@ -5,6 +5,7 @@ const { SKULLBOARD_CHANNEL_ID, SKULLBOARD_THRESHOLD } = require('../config');
 module.exports = {
     async handleReaction(reaction) {
         if (reaction.emoji.name !== SKULL) return;
+        if (!reaction.message.guild) return;
         await reaction.fetch();
         await reaction.message.fetch();
         if (reaction.count < SKULLBOARD_THRESHOLD) return;

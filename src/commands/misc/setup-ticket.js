@@ -1,17 +1,21 @@
-const { SHIELD, WRENCH, HAMMER, PALETTE, CROSSED_SWORDS, BAN, GEAR, SUCCESS } = require('../../emojis');
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelType } = require('discord.js');
+const { SHIELD, WRENCH, HAMMER, PALETTE, CROSSED_SWORDS, BAN, GEAR, SUCCESS, ERROR } = require('../../emojis');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ChannelType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('setup-ticket')
-        .setDescription('Sets up the ticket system')
-        .addChannelOption(option => 
+        .setDescription('Sets up the ticket system (staff only)')
+        .addChannelOption(option =>
             option.setName('channel')
             .setDescription('Channel for the panel')
             .addChannelTypes(ChannelType.GuildText)
-            .setRequired(true)),
+            .setRequired(true))
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
     async execute(interaction) {
+        if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
+            return interaction.reply({ content: `${ERROR} Staff only.`, ephemeral: true });
+        }
         await interaction.deferReply({ ephemeral: true });
         const targetChannel = interaction.options.getChannel('channel');
         const embed = new EmbedBuilder()

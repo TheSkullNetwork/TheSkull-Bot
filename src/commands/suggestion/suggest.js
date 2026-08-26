@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('suggest')
         .setDescription('Submit a suggestion')
-        .addStringOption(o => o.setName('text').setDescription('The suggestion').setRequired(true)),
+        .addStringOption(o => o.setName('text').setDescription('The suggestion').setRequired(true).setMaxLength(1000)),
     async execute(interaction) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
         const targetChannelId = SUGGESTIONS_CHANNEL_ID;
