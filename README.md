@@ -159,6 +159,19 @@ TheSkull-Bot uses environment variables for sensitive data like API tokens. Thes
 | :-------------- | :------------------------------------------------ | :---------------------- |
 | `DISCORD_TOKEN` | Your Discord Bot's authentication token.          | `NzY5...Xk.Xxx...xxx`   |
 | `CLIENT_ID`     | Your Discord Application's Client ID, used for slash command registration. | `123456789012345678`    |
+| `STATS_PORT`    | Port for the read-only live-stats HTTP endpoint.  | `8788`                  |
+| `STATS_HOST`    | Bind address for the stats endpoint.              | `0.0.0.0`               |
+
+### 📊 Live Stats Endpoint
+
+On startup the bot opens a tiny read-only HTTP server (default `http://0.0.0.0:8788`) exposing member profile and skullboard counts:
+
+```
+GET /stats
+→ { "profileCount": 42, "skullboardCount": 17 }
+```
+
+This is what powers the "Population" / "Profiles filed" numbers on The Skull's website: the site backend polls this endpoint once per minute and falls back to sample numbers if it can't reach it. Point the website backend at it by setting `BOT_STATS_URL=http://<bot-host>:8788/stats` in its `.env`. Any other path returns `404`, and nothing sensitive is exposed — just two integers.
 
 ## 📁 Project Structure
 
@@ -173,6 +186,8 @@ The project follows a clear and organized structure to manage different aspects 
 ├── package.json          # Node.js project manifest and dependency list
 ├── src/                  # Main source code directory
 │   ├── index.js          # Bot entry point; handles loading commands, prefix commands, events, and login
+│   ├── http/             # Read-only HTTP endpoints served alongside the bot
+│   │   └── statsServer.js  # Live /stats endpoint (profile + skullboard counts for the website)
 │   ├── config.json       # Server-specific IDs and settings (e.g., channel IDs, role IDs, prefixes, badge configurations)
 │   ├── emojis.json       # Centralized storage for all custom emoji Unicode escapes used by the bot
 │   └── ...               # Additional directories for commands, events, handlers, etc.
