@@ -161,4 +161,4 @@ const profiles = {
     }
 };
 
-module.exports = { warnings, suggestions, afk, skullboard, profiles };
+module.exports = { db, warnings, suggestions, afk, skullboard, profiles };

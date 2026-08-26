@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ quiet: true });
 const { runPreflightChecks } = require('./utils/preflight');
+const { startStatsServer } = require('./http/statsServer');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -84,6 +85,8 @@ if (!runPreflightChecks()) {
     console.error(`${ERROR} Preflight checks failed — fix the above before the bot can start.`);
     process.exit(1);
 }
+
+startStatsServer();
 
 console.log(`${INFO} Attempting to log in...`);
 client.login(process.env.TOKEN)
