@@ -11,7 +11,12 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply();
         const targetUser = interaction.options.getUser('user') || interaction.user;
-        const member = await interaction.guild.members.fetch(targetUser.id);
+        let member;
+        try {
+            member = await interaction.guild.members.fetch(targetUser.id);
+        } catch {
+            return interaction.editReply({ content: 'That user is not in this server anymore.' });
+        }
 
         const buffer = await generateProfileCard(member);
         const attachment = new AttachmentBuilder(buffer, { name: 'profile.png' });
