@@ -47,10 +47,11 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle(`${WARNING} User Kicked`)
                 .setColor('#FF0000')
+                .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
+                .setDescription(`**${target.user.tag}** was kicked from ${message.guild.name}.`)
                 .addFields(
-                    { name: 'User', value: `<@${target.id}>`, inline: true },
-                    { name: 'Moderator', value: message.author.tag, inline: true },
-                    { name: 'Reason', value: reason }
+                    { name: 'Moderator', value: `<@${message.author.id}>`, inline: true },
+                    { name: 'Reason', value: reason, inline: false }
                 )
                 .setTimestamp();
 

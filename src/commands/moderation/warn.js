@@ -49,7 +49,7 @@ module.exports = {
                 { name: `${BOOK} Reason`, value: `> ${reason}`, inline: false },
                 { name: `${INFO} Notification Status`, value: `\`${dmStatus}\``, inline: false }
             )
-            .setFooter({ text: `User ID: ${target.id} \u2014 Action ID logged`, iconURL: interaction.client.user.displayAvatarURL() })
+            .setFooter({ text: `User ID: ${target.id}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp();
 
         await interaction.deleteReply();

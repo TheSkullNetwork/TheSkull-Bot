@@ -1,16 +1,14 @@
-const skullboard = require('../../handlers/skullboard.js');
 const { updateSuggestionVotes } = require('../../handlers/suggestionReactions');
 
 module.exports = {
-    name: 'messageReactionAdd',
+    name: 'messageReactionRemove',
     async execute(reaction, user) {
         try {
             if (user.bot) return;
             if (reaction.partial) await reaction.fetch();
-            await skullboard.handleReaction(reaction);
             await updateSuggestionVotes(reaction);
         } catch (err) {
-            console.error('messageReactionAdd error:', err);
+            console.error('messageReactionRemove error:', err);
         }
     }
 };

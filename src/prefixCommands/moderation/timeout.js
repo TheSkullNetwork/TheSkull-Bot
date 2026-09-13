@@ -48,14 +48,14 @@ module.exports = {
                 await target.send({ 
                     embeds: [
                         new EmbedBuilder()
-                            .setTitle('You have been timed out')
+                            .setTitle('You were timed out')
                             .setColor(0xFFA500)
                             .setDescription(`Reason: ${reason}\nDuration: ${minutes}m\nBy: ${message.author.tag}`)
                     ] 
                 });
             } catch (e) {  }
 
-            await message.channel.send({ content: `<@${target.id}>`, embeds: [embed] });
+            await message.channel.send({ embeds: [embed] });
         } catch (error) {
             await message.reply(`${ERROR} There was an error trying to timeout this user.`);
         }

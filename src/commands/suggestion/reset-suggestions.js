@@ -25,7 +25,8 @@ module.exports = {
         suggestions.resetAll();
 
         await interaction.reply({
-            content: `${SUCCESS} All suggestions have been cleared and the counter has been reset.`,
+            content: `${SUCCESS} Cleared all suggestions. The next one will be #1.`,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

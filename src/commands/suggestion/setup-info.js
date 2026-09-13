@@ -17,9 +17,13 @@ module.exports = {
 
         const channel = interaction.options.getChannel('channel');
         const embed = new EmbedBuilder()
-            .setTitle(`${SPARKLES} How to submit a suggestion`)
-            .setDescription(`Use </suggest:1535984934181806106>\n\n1. It gets posted here.\n2. Vote with ${THUMBS_UP}/${THUMBS_DOWN}/${SHRUG}.\n3. Staff will review!`)
             .setColor(0x00AAFF)
+            .setTitle(`${SPARKLES} Got a suggestion?`)
+            .setDescription(`Use </suggest:1535984934181806106> to submit one.`)
+            .addFields(
+                { name: 'How it works', value: `1. Post your suggestion\n2. Vote with ${THUMBS_UP}/${THUMBS_DOWN}/${SHRUG}\n3. Staff reviews it` },
+                { name: 'Note', value: 'Duplicate or low-effort suggestions may be removed.' }
+            )
             .setFooter({ text: 'Powered by TheSkull' });
 
         await channel.send({ embeds: [embed] });

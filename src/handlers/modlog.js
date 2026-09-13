@@ -1,32 +1,32 @@
 const { EmbedBuilder, AuditLogEvent } = require('discord.js');
 const { WARNING, BAN, HOURGLASS, SEARCH, SHIELD, BOOK, CLOCK } = require('../emojis');
 
-function baseEmbed(entry, guild) {
+function baseEmbed(guild) {
     return new EmbedBuilder()
         .setTimestamp()
-        .setFooter({ text: `Audit Log ID: ${entry.id}`, iconURL: guild.iconURL() });
+        .setFooter({ text: '\u200B', iconURL: guild.iconURL() });
 }
 
 async function logKick(entry, guild, logChannel) {
-    const embed = baseEmbed(entry, guild)
-        .setTitle(`${WARNING} Moderation Action: Member Kicked`)
+    const embed = baseEmbed(guild)
+        .setTitle(`${WARNING} Member Kicked`)
         .setColor(0xFFA500)
         .addFields(
-            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}> \`(${entry.targetId})\``, inline: false },
-            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}> \`(${entry.executorId})\``, inline: false },
-            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}`, inline: false }
+            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}>`, inline: true },
+            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}>`, inline: true },
+            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}` }
         );
     await logChannel.send({ embeds: [embed] });
 }
 
 async function logBan(entry, guild, logChannel) {
-    const embed = baseEmbed(entry, guild)
-        .setTitle(`${BAN} Moderation Action: Member Banned`)
+    const embed = baseEmbed(guild)
+        .setTitle(`${BAN} Member Banned`)
         .setColor(0xFF0000)
         .addFields(
-            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}> \`(${entry.targetId})\``, inline: false },
-            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}> \`(${entry.executorId})\``, inline: false },
-            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}`, inline: false }
+            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}>`, inline: true },
+            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}>`, inline: true },
+            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}` }
         );
     await logChannel.send({ embeds: [embed] });
 }
@@ -35,14 +35,14 @@ async function logTimeout(entry, guild, logChannel) {
     const timeout = entry.changes.find(c => c.key === 'communication_disabled_until');
     if (!timeout || !timeout.new) return;
 
-    const embed = baseEmbed(entry, guild)
-        .setTitle(`${HOURGLASS} Moderation Action: Member Timed Out`)
+    const embed = baseEmbed(guild)
+        .setTitle(`${HOURGLASS} Member Timed Out`)
         .setColor(0xFFCC00)
         .addFields(
-            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}> \`(${entry.targetId})\``, inline: false },
-            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}> \`(${entry.executorId})\``, inline: false },
-            { name: `${CLOCK} Timeout Until`, value: `<t:${Math.floor(new Date(timeout.new).getTime() / 1000)}:F>`, inline: false },
-            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}`, inline: false }
+            { name: `${SEARCH} Target User`, value: `<@${entry.targetId}>`, inline: true },
+            { name: `${SHIELD} Moderator`, value: `<@${entry.executorId}>`, inline: true },
+            { name: `${CLOCK} Timeout Until`, value: `<t:${Math.floor(new Date(timeout.new).getTime() / 1000)}:F>`, inline: true },
+            { name: `${BOOK} Reason`, value: `> ${entry.reason || 'No reason provided'}` }
         );
     await logChannel.send({ embeds: [embed] });
 }

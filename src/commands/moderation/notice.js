@@ -25,18 +25,18 @@ module.exports = {
             .setTitle(`${CLIPBOARD} OFFICIAL NOTICE`)
             .setDescription(message) 
             .setTimestamp()
-            .setFooter({ text: `Automated Notification \u2014 ${interaction.guild.name}` });
+            .setFooter({ text: `${interaction.guild.name}` });
 
         try {
             await target.send({ embeds: [noticeEmbed] });
             await interaction.editReply({ 
-                content: `${SUCCESS} Message sent successfully to ${target.tag}!`, 
+                content: `${SUCCESS} Sent to ${target.tag}.`, 
                 ephemeral: true 
             });
         } catch (error) {
             console.error(error);
             await interaction.editReply({ 
-                content: `${ERROR} Could not send message to ${target.tag}. They might have DMs disabled.`, 
+                content: `${ERROR} Couldn't send to ${target.tag}. They may have DMs disabled.`, 
                 ephemeral: true 
             });
         }
