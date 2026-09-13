@@ -15,11 +15,16 @@ module.exports = {
         const channel = await interaction.client.channels.fetch(targetChannelId);
 
         const embed = new EmbedBuilder()
+            .setColor(0x00AAFF)
+            .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
             .setTitle(`${SPARKLES} Suggestion #${count}`)
             .setDescription(interaction.options.getString('text'))
-            .setColor(0xFFFF00)
-            .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
-            .setFooter({ text: `Suggestion ID: ${count}` });
+            .addFields(
+                { name: 'Status', value: '`Pending review`', inline: true },
+                { name: 'Votes', value: `${THUMBS_UP} 0  ${THUMBS_DOWN} 0  ${SHRUG} 0`, inline: true }
+            )
+            .setFooter({ text: `React to vote \u2022 Suggestion ID: ${count}` })
+            .setTimestamp();
         const msg = await channel.send({ embeds: [embed] });
         await msg.react(THUMBS_UP);
         await msg.react(THUMBS_DOWN);

@@ -23,7 +23,7 @@ module.exports = {
 
         if (all) {
             warnings.clearAll(target.id);
-            return interaction.reply({ content: `${SUCCESS} All warnings cleared for **${target.username}**.` });
+            return interaction.reply({ content: `${SUCCESS} Cleared all warnings for **${target.username}**.`, ephemeral: true });
         }
 
         if (!index) {
@@ -35,6 +35,6 @@ module.exports = {
             return interaction.reply({ content: `${ERROR} Invalid warning number. Use /check-warn.`, ephemeral: true });
         }
 
-        await interaction.reply({ content: `${SUCCESS} Removed warning #${index} from **${target.username}**: "${removed.reason}"` });
+        await interaction.reply({ content: `${SUCCESS} Removed warning #${index} from **${target.username}**: "${removed.reason}"`, ephemeral: true });
     }
 };

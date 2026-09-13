@@ -14,33 +14,47 @@ module.exports = {
         const reason = interaction.options.getString('reason') || 'No reason provided';
 
         if (!target) {
-            return interaction.reply({ content: `${ERROR} That user is not in this server.`, ephemeral: true });
+            return interaction.reply({ content: `${ERROR} That user isn't in this server.`, ephemeral: true });
         }
         if (target.id === interaction.guild.ownerId || (target.roles.highest >= interaction.member.roles.highest && interaction.guild.ownerId !== interaction.user.id)) {
-            return interaction.reply({ content: `${ERROR} You cannot kick someone with an equal or higher role.`, ephemeral: true });
+            return interaction.reply({ content: `${ERROR} You can't kick someone with an equal or higher role.`, ephemeral: true });
         }
-        if (!target.kickable) return interaction.reply({ content: `${ERROR} I cannot kick this user.`, ephemeral: true });
+        if (!target.kickable) return interaction.reply({ content: `${ERROR} I can't kick this user.`, ephemeral: true });
 
         await interaction.deferReply();
+        try {
+            await target.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle(`${WARNING} You were kicked`)
+                        .setColor(0xFF0000)
+                        .setDescription(`You were kicked from **${interaction.guild.name}**.`)
+                        .addFields(
+                            { name: 'Reason', value: reason, inline: false },
+                            { name: 'Moderator', value: interaction.user.tag, inline: true }
+                        )
+                        .setTimestamp()
+                ]
+            });
+        } catch (e) {}
+
         try {
             await target.kick(reason);
         } catch (err) {
             console.error('Kick failed:', err);
-            return interaction.editReply({ content: `${ERROR} Kick failed — check my role position and permissions.` });
+            return interaction.editReply({ content: `${ERROR} Kick failed. Check my role position and permissions.` });
         }
-
-        try {
-            await target.send({ embeds: [new EmbedBuilder().setTitle('You have been kicked').setColor(0xFF0000).setDescription(`Reason: ${reason}\nBy: ${interaction.user.tag}`)] });
-        } catch (e) {}
 
         const embed = new EmbedBuilder()
             .setTitle(`${WARNING} User Kicked`)
             .setColor(0xFF0000)
+            .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
+            .setDescription(`**${target.user.tag}** was kicked from ${interaction.guild.name}.`)
             .addFields(
-                { name: 'User', value: target.user.tag, inline: true },
-                { name: 'Moderator', value: `${interaction.user.tag}`, inline: true },
-                { name: 'Reason', value: reason }
-            );
+                { name: 'Moderator', value: `<@${interaction.user.id}>`, inline: true },
+                { name: 'Reason', value: reason, inline: false }
+            )
+            .setTimestamp();
 
         await interaction.editReply({ embeds: [embed] });
     },

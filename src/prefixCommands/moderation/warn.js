@@ -51,7 +51,7 @@ module.exports = {
                 { name: `${BOOK} Reason`, value: `> ${reason}`, inline: false },
                 { name: `${INFO} Notification Status`, value: `\`${dmStatus}\``, inline: false }
             )
-            .setFooter({ text: `User ID: ${target.id} \u2014 Action ID logged`, iconURL: message.client.user.displayAvatarURL() })
+            .setFooter({ text: `User ID: ${target.id}`, iconURL: message.client.user.displayAvatarURL() })
             .setTimestamp();
 
         await message.channel.send({ content: `<@${target.id}>`, embeds: [embed] });

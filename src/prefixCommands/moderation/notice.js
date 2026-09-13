@@ -23,14 +23,14 @@ module.exports = {
             .setTitle(`${CLIPBOARD} OFFICIAL NOTICE`)
             .setDescription(noticeMessage)
             .setTimestamp()
-            .setFooter({ text: `Automated Notification \u2014 ${message.guild.name}` });
+            .setFooter({ text: `${message.guild.name}` });
 
         try {
             await target.send({ embeds: [noticeEmbed] });
-            await message.reply(`${SUCCESS} Message sent successfully to ${target.tag}!`);
+            await message.reply(`${SUCCESS} Sent to ${target.tag}.`);
         } catch (error) {
             console.error(error);
-            await message.reply(`${ERROR} Could not send message to ${target.tag}. They might have DMs disabled.`);
+            await message.reply(`${ERROR} Couldn't send to ${target.tag}. They may have DMs disabled.`);
         }
     },
 };

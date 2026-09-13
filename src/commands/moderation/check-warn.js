@@ -24,10 +24,10 @@ module.exports = {
             .setTitle(`Warnings for ${target.username}`)
             .setColor(0xFFCC00)
             .setDescription(userWarnings.map((w, i) =>
-                `**${i + 1}.** ${w.reason}\n   + *Date: ${w.date} | By: ${w.moderator}*`
+                `**${i + 1}.** ${w.reason}\n   + *${w.date} | ${w.moderator}*`
             ).join('\n\n'))
             .setTimestamp();
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], ephemeral: true });
     }
 };

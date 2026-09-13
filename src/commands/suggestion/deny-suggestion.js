@@ -27,8 +27,16 @@ module.exports = {
             const channel = await interaction.client.channels.fetch(entry.channel_id);
             const message = await channel.messages.fetch(entry.msg_id);
 
-            const newEmbed = EmbedBuilder.from(message.embeds[0])
-                .addFields({ name: `${ERROR} Denied`, value: reason })
+            const oldEmbed = message.embeds[0];
+            const fields = oldEmbed.fields ? [...oldEmbed.fields] : [];
+            const statusIdx = fields.findIndex(f => f.name && f.name.includes('Status'));
+            if (statusIdx !== -1) {
+                fields[statusIdx] = { name: fields[statusIdx].name, value: `${ERROR} \`Denied\``, inline: true };
+            }
+            fields.push({ name: `${ERROR} Denial Note`, value: reason });
+
+            const newEmbed = EmbedBuilder.from(oldEmbed)
+                .setFields(fields)
                 .setColor(0xFF0000);
 
             await message.edit({ embeds: [newEmbed] });

@@ -55,6 +55,7 @@ TheSkull-Bot provides a comprehensive suite of features tailored to meet the div
 ### Everything Else
 *   **Fun Commands**: ASCII art generation, Base64/Hex encoding/decoding, and a powerful math calculator.
 *   **Utility Commands**: Commands to fetch avatar, user info, server info, and GitHub repository information.
+*   **NSFW Command**: `/rule34` (and `x!r34`) anime/hentai search with image/video/random type filters, channel-restricted, vote-gated, and with an inline "Load More" button.
 *   **Admin-Only Prefix Commands**: `say`, `react`, and `hot-reload` (to reload a command without restarting the bot).
 *   **Dynamic Help Command**: The `/help` command dynamically pulls its list of commands, ensuring it's always up-to-date.
 *   **Multiple Command Prefixes**: Supports multiple command prefixes simultaneously (e.g., `x!` and `.`).
@@ -66,7 +67,7 @@ TheSkull-Bot is built using a modern JavaScript stack, leveraging powerful libra
 | Technology          | Version | Description                                                               |
 | :------------------ | :------ | :------------------------------------------------------------------------ |
 | Node.js             | ^18.x   | JavaScript runtime for server-side execution.                             |
-| discord.js          | ^14.14.1 | Powerful library for interacting with the Discord API.                    |
+| discord.js          | ^14.26.2 | Powerful library for interacting with the Discord API.                    |
 | better-sqlite3      | ^11.3.0 | Fast, simple, and full-featured SQLite3 library for persistent storage.   |
 | @napi-rs/canvas     | ^0.1.53 | High-performance Canvas API implementation for generating profile images. |
 | axios               | ^1.7.7  | Promise-based HTTP client for making API requests (e.g., GitHub API).    |
@@ -115,15 +116,16 @@ Follow these steps to get TheSkull-Bot up and running on your local machine or s
 4.  **Configure Environment Variables:**
     Open the newly created `.env` file and add your Discord bot token and client ID:
     ```ini
-    DISCORD_TOKEN=YOUR_BOT_TOKEN_HERE
+    TOKEN=YOUR_BOT_TOKEN_HERE
     CLIENT_ID=YOUR_BOT_CLIENT_ID_HERE
     ```
     *   Replace `YOUR_BOT_TOKEN_HERE` with the token copied from the Discord Developer Portal.
     *   Replace `YOUR_BOT_CLIENT_ID_HERE` with your application's client ID, also found in the Discord Developer Portal under "General Information".
+    *   See the [Environment Variables](#-environment-variables) table below for the full list.
 
 5.  **Configure Bot Settings:**
     Navigate to the `src` directory. You will find `config.json` and `emojis.json`.
-    *   **`src/config.json`**: This file contains server-specific IDs and settings. You will need to update `guildId`, `moderationLogChannelId`, `ticketLogChannelId`, `skullboardChannelId`, `suggestionChannelId`, and other relevant IDs to match your Discord server's setup. This also includes configuring custom role badges.
+    *   **`src/config.json`**: This file contains server-specific IDs and settings. You will need to update `STAFF_ROLE_ID`, `MEMBER_ROLE_ID`, `TICKET_LOG_CHANNEL_ID`, `MOD_LOG_CHANNEL_ID`, `SKULLBOARD_CHANNEL_ID`, `SUGGESTIONS_CHANNEL_ID`, `R34_CHANNEL_ID`, `SKULLBOARD_THRESHOLD`, and `ROLE_BADGES` to match your Discord server's setup.
     *   **`src/emojis.json`**: This file stores all custom emoji Unicode escapes used by the bot. Ensure any custom emojis your bot will use are correctly configured here if needed.
 
 ## ▶️ Usage
@@ -157,10 +159,13 @@ TheSkull-Bot uses environment variables for sensitive data like API tokens. Thes
 
 | Variable        | Description                                       | Example                 |
 | :-------------- | :------------------------------------------------ | :---------------------- |
-| `DISCORD_TOKEN` | Your Discord Bot's authentication token.          | `NzY5...Xk.Xxx...xxx`   |
+| `TOKEN`         | Your Discord Bot's authentication token.          | `NzY5...Xk.Xxx...xxx`   |
 | `CLIENT_ID`     | Your Discord Application's Client ID, used for slash command registration. | `123456789012345678`    |
 | `STATS_PORT`    | Port for the read-only live-stats HTTP endpoint.  | `8788`                  |
 | `STATS_HOST`    | Bind address for the stats endpoint.              | `0.0.0.0`               |
+| `TOP_GG_TOKEN`  | top.gg API token used to verify votes before the NSFW command. If unset, the vote check is skipped. | `your-top-gg-token-here` |
+| `RULE34_API_KEY`| Rule34 API key required for the NSFW `/rule34` command. | `your-rule34-api-key-here` |
+| `RULE34_USER_ID`| Rule34 API user ID required for the NSFW `/rule34` command. | `your-rule34-user-id-here` |
 
 ### 📊 Live Stats Endpoint
 

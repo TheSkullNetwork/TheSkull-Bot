@@ -38,7 +38,7 @@ module.exports = {
         }
 
         try {
-            await target.send({ embeds: [new EmbedBuilder().setTitle('You have been timed out').setColor(0xFFA500).setDescription(`Reason: ${reason}\nDuration: ${minutes}m\nBy: ${interaction.user.tag}`)] });
+            await target.send({ embeds: [new EmbedBuilder().setTitle('You were timed out').setColor(0xFFA500).setDescription(`Reason: ${reason}\nDuration: ${minutes}m\nBy: ${interaction.user.tag}`)] });
         } catch (e) {}
 
         const embed = new EmbedBuilder()
@@ -50,6 +50,6 @@ module.exports = {
                 { name: 'Duration', value: `${minutes} minutes`, inline: true },
                 { name: 'Reason', value: reason }
             );
-        await interaction.editReply({ content: `<@${target.id}>`, embeds: [embed] });
+        await interaction.editReply({ embeds: [embed] });
     },
 };

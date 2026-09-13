@@ -27,8 +27,16 @@ module.exports = {
             const channel = await interaction.client.channels.fetch(entry.channel_id);
             const message = await channel.messages.fetch(entry.msg_id);
 
-            const newEmbed = EmbedBuilder.from(message.embeds[0])
-                .addFields({ name: `${SUCCESS} Approved`, value: reason })
+            const oldEmbed = message.embeds[0];
+            const fields = oldEmbed.fields ? [...oldEmbed.fields] : [];
+            const statusIdx = fields.findIndex(f => f.name && f.name.includes('Status'));
+            if (statusIdx !== -1) {
+                fields[statusIdx] = { name: fields[statusIdx].name, value: `${SUCCESS} \`Approved\``, inline: true };
+            }
+            fields.push({ name: `${SUCCESS} Approver Note`, value: reason });
+
+            const newEmbed = EmbedBuilder.from(oldEmbed)
+                .setFields(fields)
                 .setColor(0x00FF00);
 
             await message.edit({ embeds: [newEmbed] });
