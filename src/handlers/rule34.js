@@ -42,12 +42,53 @@ function checkCooldown(userId) {
     return 0;
 }
 
-async function checkVote(clientId, userId, token) {
+const V1_BASE = 'https://top.gg/api/v1';
+let projectInfo = null;
+
+async function getProjectInfo() {
+    if (projectInfo) return projectInfo;
+    const token = process.env.TOP_GG_TOKEN;
+    if (!token) return null;
     try {
-        const { data } = await axios.get(`https://top.gg/api/bots/${clientId}/check?userId=${userId}`, {
-            headers: { Authorization: token }
+        const { data } = await axios.get(`${V1_BASE}/projects/@me`, {
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 10000
         });
-        return data && data.voted === 1;
+        if (!data || !data.id) return null;
+        projectInfo = {
+            projectId: data.id,
+            platformId: data.platform_id || data.id,
+            name: data.name,
+            type: data.type
+        };
+    } catch {
+        return null;
+    }
+    return projectInfo;
+}
+
+function voteUrl(info, fallbackClientId) {
+    const overrideId = process.env.TOP_GG_VOTE_ID;
+    const platformId = overrideId || (info && info.platformId) || fallbackClientId;
+    const path = info && info.type === 'server' ? 'discord/servers' : 'bot';
+    return `https://top.gg/${path}/${platformId}/vote`;
+}
+
+async function checkVote(userId) {
+    const token = process.env.TOP_GG_TOKEN;
+    if (!token) return true;
+    const info = await getProjectInfo();
+    if (!info) return true;
+    try {
+        const { status, data } = await axios.get(`${V1_BASE}/projects/@me/votes/${userId}`, {
+            params: { source: 'discord' },
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 10000,
+            validateStatus: () => true
+        });
+        if (status !== 200) return false;
+        if (!data || !data.expires_at) return false;
+        return Date.parse(data.expires_at) > Date.now();
     } catch {
         return true;
     }
@@ -150,9 +191,12 @@ function buildErrorPayload(message) {
     return { components: [container], flags: MessageFlags.IsComponentsV2 };
 }
 
-function buildVoteRequiredPayload(clientId) {
+async function buildVoteRequiredPayload(fallbackClientId) {
+    const info = await getProjectInfo();
+    const target = info && info.type === 'server' ? 'the server' : 'the bot';
+    const name = info && info.name ? `**${info.name}**` : 'the bot';
     const text = new TextDisplayBuilder().setContent(
-        `**Vote Required**\nYou must vote for the bot on top.gg before using this command!\n\n**Vote here:** https://top.gg/bot/${clientId}`
+        `**Vote Required**\nYou must vote for ${name} (${target}) on top.gg before using this command!\n\n**Vote here:** ${voteUrl(info, fallbackClientId)}`
     );
     const container = new ContainerBuilder()
         .setAccentColor(DARK_GREY)

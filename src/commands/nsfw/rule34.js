@@ -43,9 +43,9 @@ module.exports = {
         const topGgToken = process.env.TOP_GG_TOKEN;
 
         if (clientId && topGgToken) {
-            const voted = await checkVote(clientId, interaction.user.id, topGgToken);
+            const voted = await checkVote(interaction.user.id);
             if (!voted) {
-                return interaction.reply(ephemeral(buildVoteRequiredPayload(clientId)));
+                return interaction.reply(ephemeral(await buildVoteRequiredPayload(clientId)));
             }
         }
 

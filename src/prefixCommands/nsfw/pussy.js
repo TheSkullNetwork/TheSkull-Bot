@@ -10,9 +10,9 @@ module.exports = {
         const clientId = process.env.CLIENT_ID;
         const topGgToken = process.env.TOP_GG_TOKEN;
         if (clientId && topGgToken) {
-            const voted = await checkVote(clientId, message.author.id, topGgToken);
+            const voted = await checkVote(message.author.id);
             if (!voted) {
-                return message.reply(buildVoteRequiredPayload(clientId));
+                return message.reply(await buildVoteRequiredPayload(clientId));
             }
         }
         await handleR34Command(message, 'pussy', 'images');
